@@ -66,27 +66,44 @@ def getOdds(sport, runNum):
             
             current = pandas.read_csv(fileName).drop(columns='Unnamed: 0')
             difference = len(current.index)-len(oddsDF.index)
-            if difference>0:
-                #deal with the fact that there are fewer items in the new set than already in the sheet.
-                print(difference)
-                missingTeams = set(oddsDF.iloc[:,3]).symmetric_difference(set(current.iloc[:, 3]))
-                empty = pandas.DataFrame(np.full((difference,7), np.nan),columns=oddsDF.columns)
-                oddsDFFixed = pandas.concat((empty,oddsDF))
-                
-                print(missingTeams)
-                print(len(missingTeams))
-                numFilled = 0
-                for ind, team in enumerate(missingTeams):
-                    
-                    numToFill = current['home_team'].value_counts.team
-                    oddsDF.iloc[numFilled:numToFill,3]=team
-                    numFilled += numToFill
-                oddsDF = oddsDF.sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
+            origLeng = len(current.index)
+            dfLeng = len(oddsDF.index)
 
+            #print(current.head())
+            #fullDF = pandas.concat([current,oddsDF],axis=0).drop_duplicates(['home_team','name','bookmakers.title']).sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
 
-            oddsDF = oddsDF.rename(columns={'price':f'price{runNum}','point':f'point{runNum}'}).drop(['home_team','away_team','bookmakers.title','commence_time','name'],axis=1)
+            #deal with the fact that there are fewer items in the new set than already in the sheet.
+            for x in range(len(current.index)):
+                for y in range(len(oddsDF.index)):
+
+                    if (current.loc[x,'home_team']==oddsDF.loc[y,'home_team'] and current.loc[x,'bookmakers.title']==oddsDF.loc[y,'bookmakers.title'] and current.loc[x,'name']==oddsDF.loc[y,'name']):
+                        if x==y:
+                            break
+                        else:
+                            print("adding chunk of missing values to current from new list")
+                            print(oddsDF.loc[x:y-1,:])
+                            current = current.append(oddsDF.loc[x:y-1,:]).sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
+                            break
+                    #oddsDF = oddsDF.sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
+                    if y == len(oddsDF.index)-1:
+                        print("match for current value not found, adding to new list")
+                        oddsDF = oddsDF.append(current.loc[x,:])
+                        oddsDF = oddsDF.sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
+                if x == len(current.index)-1 and len(current.index)< len(oddsDF):
+                    print("adding end of new frame")
+                    current = current.append(oddsDF.loc[x+1:,['name','price','point','home_team','away_team','bookmakers.title','commence_time']])
+                    print(current.tail)
+                    break
+
+            #current = current.sort_index().reset_index(drop=True)
             
+                
+                
+            #switch these after testing
+            oddsDF = oddsDF.rename(columns={'price':f'price{runNum}','point':f'point{runNum}'}).drop(['home_team','away_team','bookmakers.title','commence_time','name'],axis=1)
+            #oddsDF = oddsDF.rename(columns={'price':f'price{runNum}','point':f'point{runNum}'}).drop(['away_team','bookmakers.title','name'],axis=1)
             newDF = pandas.concat([current,oddsDF],axis=1)
+            
             newDF.to_csv(fileName)
     # Check the usage quota
     print('Remaining requests', odds_response.headers['x-requests-remaining'])
