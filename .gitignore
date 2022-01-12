@@ -6,6 +6,9 @@ __pycache__/
 #ignore csv files
 *.csv
 
+#ignore test file
+test.py
+
 # C extensions
 *.so
 
