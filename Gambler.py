@@ -87,7 +87,7 @@ def getOdds(sport, runNum):
                     #oddsDF = oddsDF.sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
                     if y == len(oddsDF.index)-1:
                         print("match for current value not found, adding to new list")
-                        oddsDF = oddsDF.append(current.loc[x,:])
+                        oddsDF = oddsDF.append(current.loc[x,['name','price','point','home_team','away_team','bookmakers.title','commence_time']])
                         oddsDF = oddsDF.sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
                 if x == len(current.index)-1 and len(current.index)< len(oddsDF):
                     print("adding end of new frame")
