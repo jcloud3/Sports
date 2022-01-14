@@ -1,7 +1,7 @@
 import pandas
 from datetime import date
 
-THRESHHOLD = 3
+THRESHHOLD = 3.5
 
 def CheckBets(sport, num):
     if num>1:
@@ -22,4 +22,4 @@ def CheckBets(sport, num):
         oddsDF = pandas.concat([overs,unders])
         fileName = sport + 'BETS.csv'
         oddsDF.to_csv(fileName)
-#CheckBets('basketball_nba', 2)
+CheckBets('basketball_ncaab', 6)

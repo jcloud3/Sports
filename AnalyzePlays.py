@@ -19,23 +19,24 @@ def CheckBets(sport, num):
         unders = unders[unders['point']-unders[f'point{num}'] <- THRESHHOLD]
         
         overs = overs[overs['bookmakers.title'].str.contains('BetRivers',case=False)]
-        unders = unders[overs['bookmakers.title'].str.contains('BetRivers',case=False)]
+        unders = unders[unders['bookmakers.title'].str.contains('BetRivers',case=False)]
         overs['result'] = overs[f'point{num}']<overs['total_score']
         results['win'] = overs.result.sum()
         results['loss'] = (overs[f'point{num}']>overs['total_score']).sum()
         results['push'] = (overs[f'point{num}']==overs['total_score']).sum()
-        unders['result'] = unders[f'point{num}']>overs['total_score']
+        unders['result'] = unders[f'point{num}']>unders['total_score']
         results['win'] += unders.result.sum()
         results['loss'] += (unders[f'point{num}']<unders['total_score']).sum()
-        results['push'] = (unders[f'point{num}']==overs['total_score']).sum()
+        results['push'] = (unders[f'point{num}']==unders['total_score']).sum()
         
         
         oddsDF = pandas.concat([overs,unders])
         #need to fix this. Should only get price of winning bets
-        results['price'] = oddsDF['price'].mean()
+        results['price'] = oddsDF[oddsDF['result']][f'price{num}'].mean()
         print(oddsDF)
         
         print(results)
         fileName = sport + 'BETS.csv'
         #oddsDF.to_csv(fileName)
-CheckBets('basketball_nba',2)
+#def Loopthrough()
+CheckBets('basketball_nba',5)
