@@ -1,12 +1,12 @@
 import pandas
 from datetime import datetime, timedelta
 
-THRESHHOLD = 3
+THRESHHOLD = 5
 
 
 
-def CheckBets(sport, num, book=''):
-    results = pandas.DataFrame([[sport,0,0,0,0.0]],columns=['sport','win','loss','push','price'])
+def CheckBets(sport, num, thresh,book=''):
+    results = pandas.DataFrame([[sport,thresh,num,0,0,0,0.0]],columns=['sport','THRESHHOLD','runNum','win','loss','push','price'])
     if num>1:
         yesterday = (datetime.today()- timedelta(days = 1)).strftime('%Y-%m-%d')
         fileName = sport+yesterday+".csv"
@@ -32,11 +32,21 @@ def CheckBets(sport, num, book=''):
         
         oddsDF = pandas.concat([overs,unders])
         #need to fix this. Should only get price of winning bets
-        results['price'] = oddsDF[oddsDF['result']][f'price{num}'].mean()
-        print(oddsDF)
+        if(results.loc[0,'win']>0):
+            results['price'] = oddsDF[oddsDF['result']][f'price{num}'].mean()*results['win']-(results['win']+results['loss'])
+        #print(oddsDF)
+        else:
+            results['price'] = -(results['win']+results['loss'])
         
-        print(results)
+        return results
         fileName = sport + 'BETS.csv'
         #oddsDF.to_csv(fileName)
-#def Loopthrough()
-CheckBets('basketball_nba',5)
+def Loopthrough():
+    df = pandas.DataFrame()
+    for run in range(6):
+        for thresh in range(THRESHHOLD):
+            df = pandas.concat([df,CheckBets('basketball_ncaab',run,thresh,book='betrivers')])
+    print(df)
+
+#CheckBets('basketball_nba',5)
+Loopthrough()
