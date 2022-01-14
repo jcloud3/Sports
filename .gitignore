@@ -9,6 +9,8 @@ __pycache__/
 #ignore test file
 test.py
 
+*.DS_Store
+
 # C extensions
 *.so
 
