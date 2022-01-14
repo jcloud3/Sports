@@ -5,7 +5,7 @@ THRESHHOLD = 3
 
 
 
-def CheckBets(sport, num):
+def CheckBets(sport, num, book=''):
     results = pandas.DataFrame([[sport,0,0,0,0.0]],columns=['sport','win','loss','push','price'])
     if num>1:
         yesterday = (datetime.today()- timedelta(days = 1)).strftime('%Y-%m-%d')
@@ -17,9 +17,9 @@ def CheckBets(sport, num):
         
         overs = overs[overs['point'] - overs[f'point{num}'] > THRESHHOLD]
         unders = unders[unders['point']-unders[f'point{num}'] <- THRESHHOLD]
-        
-        overs = overs[overs['bookmakers.title'].str.contains('BetRivers',case=False)]
-        unders = unders[unders['bookmakers.title'].str.contains('BetRivers',case=False)]
+        if book!='':
+            overs = overs[overs['bookmakers.title'].str.contains(book,case=False)]
+            unders = unders[unders['bookmakers.title'].str.contains(book,case=False)]
         overs['result'] = overs[f'point{num}']<overs['total_score']
         results['win'] = overs.result.sum()
         results['loss'] = (overs[f'point{num}']>overs['total_score']).sum()
