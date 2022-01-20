@@ -1,11 +1,18 @@
+from ast import Num
 import Gambler
 import schedule
 import time
+import Runner
+import os.path
+from datetime import date
+
+
 
 def job():
-    print("I'm working...")
+    
+    Runner.run()
 
-schedule.every().day.at("10:47").do(job)
+schedule.every(10).minutes.do(job)
 
 
 while True:

@@ -1,7 +1,11 @@
 import Gambler
 import FindBets
-runNum = 9
-Gambler.getOdds('basketball_ncaab',runNum)
-Gambler.getOdds('basketball_nba',runNum)
-FindBets.CheckBets('basketball_ncaab',runNum)
-FindBets.CheckBets('basketball_nba',runNum)
+
+
+def run():
+    Gambler.getOdds('basketball_ncaab')
+    Gambler.getOdds('basketball_nba')
+    FindBets.CheckBets('basketball_ncaab')
+    FindBets.CheckBets('basketball_nba')
+
+run()

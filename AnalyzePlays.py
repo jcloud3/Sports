@@ -45,7 +45,8 @@ def Loopthrough():
     df = pandas.DataFrame()
     for run in range(6):
         for thresh in range(THRESHHOLD):
-            df = pandas.concat([df,CheckBets('basketball_ncaab',run,thresh,book='betrivers')])
+            #df = pandas.concat([df,CheckBets('basketball_ncaab',run,thresh,book='betrivers')])
+            df = pandas.concat([df,CheckBets('basketball_ncaab',run,thresh)])
     print(df)
 
 #CheckBets('basketball_nba',5)
