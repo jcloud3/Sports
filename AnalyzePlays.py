@@ -1,7 +1,7 @@
 import pandas
 from datetime import datetime, timedelta
 
-THRESHHOLD = 5
+THRESHHOLD = 2
 
 
 
@@ -17,9 +17,11 @@ def CheckBets(sport, num, thresh,book=''):
         
         overs = overs[overs['point'] - overs[f'point{num}'] > THRESHHOLD]
         unders = unders[unders['point']-unders[f'point{num}'] <- THRESHHOLD]
+        
         if book!='':
             overs = overs[overs['bookmakers.title'].str.contains(book,case=False)]
             unders = unders[unders['bookmakers.title'].str.contains(book,case=False)]
+        
         overs['result'] = overs[f'point{num}']<overs['total_score']
         results['win'] = overs.result.sum()
         results['loss'] = (overs[f'point{num}']>overs['total_score']).sum()
@@ -29,7 +31,8 @@ def CheckBets(sport, num, thresh,book=''):
         results['loss'] += (unders[f'point{num}']<unders['total_score']).sum()
         results['push'] = (unders[f'point{num}']==unders['total_score']).sum()
         
-        
+        print(overs)
+        print(unders)
         oddsDF = pandas.concat([overs,unders])
         #need to fix this. Should only get price of winning bets
         if(results.loc[0,'win']>0):
@@ -43,11 +46,12 @@ def CheckBets(sport, num, thresh,book=''):
         #oddsDF.to_csv(fileName)
 def Loopthrough():
     df = pandas.DataFrame()
-    for run in range(6):
+    for run in range(3):
         for thresh in range(THRESHHOLD):
             #df = pandas.concat([df,CheckBets('basketball_ncaab',run,thresh,book='betrivers')])
-            df = pandas.concat([df,CheckBets('basketball_ncaab',run,thresh)])
-    print(df)
+            df = pandas.concat([df,CheckBets('basketball_nba',run,thresh)])
+            df.to_csv("nbaresults.csv")
+    
 
 #CheckBets('basketball_nba',5)
 Loopthrough()

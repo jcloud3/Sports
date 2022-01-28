@@ -4,19 +4,25 @@ import schedule
 import time
 import Runner
 import os.path
-from datetime import date
+import FinalsNBA
+import FinalNCAAB
+def yesterdayScores():
+                
+    FinalNCAAB.getFinalScores()
 
-
+    FinalsNBA.getFinalScores()
 
 def job():
     
     Runner.run()
 
 schedule.every(10).minutes.do(job)
+schedule.every(1).day.do(yesterdayScores)
 
 
 while True:
     schedule.run_pending()
+    
     time.sleep(1)
-
+   
 
