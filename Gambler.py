@@ -118,7 +118,7 @@ def getOdds(sport):
             tomorrow = oddsDF.iloc[indOfTomorrow:,:].sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
             tomorrowFile = sport+tomorrowday+'.csv'
             if not(os.path.exists(tomorrowFile)):
-                print(indOfTomorrow)
+               # print(indOfTomorrow)
                 tomorrow.to_csv(tomorrowFile)
             else:
                 openExisting(tomorrowFile,tomorrow)

@@ -42,8 +42,8 @@ def CheckBets(sport):
         
         oddsDF = pandas.concat([overs,unders],ignore_index=True)
         print(oddsDF)
-        if len(oddsDF) > 0:
-            SendEmail(oddsDF)
+       # if len(oddsDF) > 0:
+           # SendEmail(oddsDF)
         fileName = sport + 'BETS.csv'
         oddsDF.to_csv(fileName)
 #CheckBets('basketball_ncaab')

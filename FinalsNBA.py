@@ -24,4 +24,4 @@ def getFinalScores():
         oddsDF.loc[oddsDF['home_team'].str.contains(row.loc['home_name'],case=False),['total_score']] = row.loc['total_score']
 
     oddsDF.to_csv(fileName)
-getFinalScores()
+#getFinalScores()
