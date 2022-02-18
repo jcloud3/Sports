@@ -108,30 +108,32 @@ def getOdds(sport):
 
     else:
         odds_json = odds_response.json()
-        print('Number of events:', len(odds_json))
-        oddsDF = ToPandas.pds(odds_json).sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
-        oddsDF=oddsDF.sort_values(["commence_time"],ignore_index=True)
-        tomorrowday = (datetime.today()+ timedelta(days = 1)).strftime('%Y-%m-%d')
-        tomDateTime = tomorrowday +'T09:00:00Z'
-        indOfTomorrow = len(np.where(oddsDF.loc[:,'commence_time']<tomDateTime)[0])
-        if indOfTomorrow < len(oddsDF.index):
-            tomorrow = oddsDF.iloc[indOfTomorrow:,:].sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
-            tomorrowFile = sport+tomorrowday+'.csv'
-            if not(os.path.exists(tomorrowFile)):
-               # print(indOfTomorrow)
-                tomorrow.to_csv(tomorrowFile)
-            else:
-                openExisting(tomorrowFile,tomorrow)
-            oddsDF = oddsDF.iloc[:indOfTomorrow,:]
-        oddsDF = oddsDF.sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
-        today = str(date.today())
-        fileName = sport+today+".csv"
-        if not(os.path.exists(fileName)):
-            oddsDF.to_csv(fileName)
-            
-        else:
-            openExisting(fileName,oddsDF)
+        if len(odds_json) > 0:
+            print('Number of events:', len(odds_json))
+
+            oddsDF = ToPandas.pds(odds_json).sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
+            oddsDF=oddsDF.sort_values(["commence_time"],ignore_index=True)
+            tomorrowday = (datetime.today()+ timedelta(days = 1)).strftime('%Y-%m-%d')
+            tomDateTime = tomorrowday +'T09:00:00Z'
+            indOfTomorrow = len(np.where(oddsDF.loc[:,'commence_time']<tomDateTime)[0])
+            if indOfTomorrow < len(oddsDF.index):
+                tomorrow = oddsDF.iloc[indOfTomorrow:,:].sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
+                tomorrowFile = sport+tomorrowday+'.csv'
+                if not(os.path.exists(tomorrowFile)):
+                # print(indOfTomorrow)
+                    tomorrow.to_csv(tomorrowFile)
+                else:
+                    openExisting(tomorrowFile,tomorrow)
+                oddsDF = oddsDF.iloc[:indOfTomorrow,:]
+            oddsDF = oddsDF.sort_values(["home_team",'bookmakers.title','name'],ignore_index=True)
+            today = str(date.today())
+            fileName = sport+today+".csv"
+            if not(os.path.exists(fileName)):
+                oddsDF.to_csv(fileName)
                 
+            else:
+                openExisting(fileName,oddsDF)
+                    
     # Check the usage quota
     print('Remaining requests', odds_response.headers['x-requests-remaining'])
     print('Used requests', odds_response.headers['x-requests-used'])
