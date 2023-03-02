@@ -50,5 +50,26 @@ def CheckBets(sport):
             oddsDF.to_csv(fileName)
 #CheckBets('basketball_ncaab')
 
+def CheckViability():
+    #loop through each line and check any pair of odds for a given match
+    #implied probability must be < 100% for a bet to be viable
+    
+    return 0
+
+def ImpliedProbability(odds1,odds2):
+    return 1/odds1 + 1/odds2
+
+
+def StakeCalculation(odds1,odds2,stake1):
+    #this results in the largest possible win if you think team 1 will win
+    team1towin = stake1/(odds2-1)
+
+    #this results in the largest possible win if you think team 2 will win
+    team2towin = stake1*(odds1-1) 
+
+    return team1towin, team2towin
+
+
+
 
 

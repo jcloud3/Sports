@@ -30,13 +30,13 @@ def openExisting(fileName, oddsDF):
 
 # An api key is emailed to you when you sign up to a plan
 # Get a free API key at https://api.the-odds-api.com/
-API_KEY = 'ef569f22e002a9b39a8df3f173ee03eb'
+API_KEY = '195ea6f9cccf6e2c4e568757d10f0b83'
 
 #SPORT = 'basketball_nba' # use the sport_key from the /sports endpoint below, or use 'upcoming' to see the next 8 games across all sports
 
 REGIONS = 'us' # uk | us | eu | au. Multiple can be specified if comma delimited
 
-MARKETS = 'totals' # h2h | spreads | totals. Multiple can be specified if comma delimited
+MARKETS = 'h2h' # h2h | spreads | totals. Multiple can be specified if comma delimited
 
 ODDS_FORMAT = 'decimal' # decimal | american
 
@@ -66,6 +66,7 @@ def getOdds(sport):
             'markets': MARKETS,
             'oddsFormat': ODDS_FORMAT,
             'dateFormat': DATE_FORMAT,
+            'bookmakers':['draftkings','fanduel'],
         }
     )
 
@@ -104,4 +105,4 @@ def getOdds(sport):
     print('Remaining requests', odds_response.headers['x-requests-remaining'])
     print('Used requests', odds_response.headers['x-requests-used'])
 
-
+checkSports()
