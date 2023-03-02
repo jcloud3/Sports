@@ -3,7 +3,7 @@ import pandas
 from datetime import date
 import smtplib, ssl
 import os.path
-
+#need to hide email password in system variable later
 THRESHHOLD = 3.5
 def SendEmail(bets):
     port = 465  # For SSL
