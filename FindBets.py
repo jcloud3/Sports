@@ -7,6 +7,7 @@ import os.path
 THRESHHOLD = 3.5
 def SendEmail(bets):
     port = 465  # For SSL
+    #update with real password in env variable in production
     password = "Makememoney123"
 
     # Create a secure SSL context
